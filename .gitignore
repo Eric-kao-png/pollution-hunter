@@ -1,0 +1,17 @@
+# macOS 系統產生的垃圾檔案
+.DS_Store
+
+# 編譯產物
+*.out
+*.o
+*.obj
+*.exe
+*.a
+*.so
+*.dll
+
+# VSCode 設定資料夾
+.vscode/
+
+# 執行檔
+main
