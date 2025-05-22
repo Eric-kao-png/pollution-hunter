@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "./GameState.hpp"
 #include "./states/MainPage.hpp"
+#include "./states/CharacterPage.hpp"
 
 class MainPage;
 
@@ -17,6 +18,8 @@ class Game {
       public:
 
       Game ();
+
+      const sf::Font& getFont () const { return font; }
 
       void run ();
       void changeState (std::unique_ptr<GameState> newState);

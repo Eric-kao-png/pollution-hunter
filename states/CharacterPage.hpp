@@ -1,32 +1,28 @@
-#ifndef MAINPAGE_H
-#define MAINPAGE_H
+#ifndef CHARACTERPAGE_H
+#define CHARACTERPAGE_H
 
 #include "../GameState.hpp"
 #include "../Game.hpp"
 #include "../entities/Button.hpp"
-#include "./CharacterPage.hpp"
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include "./MainPage.hpp"
 
 class Game;
 
-class MainPage : public GameState {
+class CharacterPage : public GameState {
       private:
 
       Game* game;
 
-      Button playButton;
-      Button characterButton;
-      Button exitButton;
+      Button quitButton;
 
       public:
 
-      MainPage(Game* game);
+      CharacterPage (Game* game);
 
       void handleInput(sf::RenderWindow &window) override;
       void update(sf::RenderWindow &window) override;
       void render(sf::RenderWindow &window) override;
-      ~MainPage () override = default;
+      ~CharacterPage () override = default;
 };
 
-#endif // MAINPAGE_H
+#endif // CHARACTERPAGE_H
