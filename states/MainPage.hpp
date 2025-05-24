@@ -5,6 +5,7 @@
 #include "../Game.hpp"
 #include "../entities/Button.hpp"
 #include "./CharacterPage.hpp"
+#include "./GamePlayPage.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 

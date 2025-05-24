@@ -1,10 +1,11 @@
-#include "CharacterPage.hpp"
+#include "./GamePlayPage.hpp"
 
-CharacterPage::CharacterPage (Game* game)
+GamePlayPage::GamePlayPage(Game* game) 
       : game(game),
-        quitButton({100, 100}, {100, 50}, "Quit", game -> getFont()) {}
+        quitButton({100, 100}, {100, 50}, "Quit", game -> getFont()),
+        character("Hero", 10, 1, 1, map) {}
 
-void CharacterPage::handleInput(sf::RenderWindow &window) {
+void GamePlayPage::handleInput (sf::RenderWindow &window) {
       while (const std::optional event = window.pollEvent()) {
             if (event -> is<sf::Event::Closed>()) {
                   window.close();
@@ -17,16 +18,23 @@ void CharacterPage::handleInput(sf::RenderWindow &window) {
                   if (quitButton.isClicked(mousePos)) {
                         game -> changeState(std::make_unique<MainPage>(game));
                   }
+
+                  if (map.isClicked(mousePos)) {
+                        character.setTargetPoint(mousePos);
+                  }
             }
       }
 }
 
-void CharacterPage::update(sf::RenderWindow &window) {
-      
+void GamePlayPage::update (sf::RenderWindow &window) {
+      map.update();
+      character.update();
 }
 
-void CharacterPage::render(sf::RenderWindow &window) {
+void GamePlayPage::render (sf::RenderWindow &window) {
       window.clear(sf::Color::Black);
+      map.render(window);
+      character.render(window);
       quitButton.render(window);
       window.display();
 }

@@ -1,29 +1,33 @@
-#ifndef CHARACTERPAGE_H
-#define CHARACTERPAGE_H
+#ifndef GAMEPLAYPAGE_H
+#define GAMEPLAYPAGE_H
 
 #include "../GameState.hpp"
 #include "../Game.hpp"
 #include "../entities/Button.hpp"
 #include "../entities/Character.hpp"
-#include "./MainPage.hpp"
+#include "../entities/Map.hpp"
 
 class Game;
 
-class CharacterPage : public GameState {
+class GamePlayPage : public GameState {
       private:
 
       Game* game;
 
       Button quitButton;
-      
+
+      Map map;
+
+      Character character;
+
       public:
 
-      CharacterPage (Game* game);
+      GamePlayPage (Game* game);
 
       void handleInput(sf::RenderWindow &window) override;
       void update(sf::RenderWindow &window) override;
       void render(sf::RenderWindow &window) override;
-      ~CharacterPage () override = default;
+      ~GamePlayPage () override = default;
 };
 
-#endif // CHARACTERPAGE_H
+#endif // GAMEPLAYPAGE_H

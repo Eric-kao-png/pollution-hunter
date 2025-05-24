@@ -16,9 +16,9 @@ void MainPage::handleInput (sf::RenderWindow &window) {
             sf::Vector2i mousePosPixel = sf::Mouse::getPosition(window);
             sf::Vector2f mousePos = window.mapPixelToCoords(mousePosPixel);
 
-            // if (playButton.isClicked(mousePos)) {
-            //     game -> changeState(std::make_unique<GamePlayPage>);
-            // }
+            if (playButton.isClicked(mousePos)) {
+                game -> changeState(std::make_unique<GamePlayPage>(game));
+            }
 
             if (characterButton.isClicked(mousePos)) {
                 game -> changeState(std::make_unique<CharacterPage>(game));
