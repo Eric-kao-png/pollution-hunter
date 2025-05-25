@@ -26,15 +26,9 @@ void GamePlayPage::handleInput (sf::RenderWindow &window) {
             }
 
             if (const auto* keyPressed = event -> getIf<sf::Event::KeyPressed>()) {
-
+                  
                   if (keyPressed -> code == sf::Keyboard::Key::A)  {
                         character.setIsAttacking(true);
-                  }
-            }
-            if (const auto* keyReleased = event -> getIf<sf::Event::KeyReleased>()) {
-
-                  if (keyReleased -> code == sf::Keyboard::Key::A)  {
-                        character.setIsAttacking(false);
                   }
             }
       }

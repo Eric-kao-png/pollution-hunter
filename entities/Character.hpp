@@ -18,6 +18,9 @@ class Character {
 
       sf::RectangleShape shape;
       sf::Vector2f targetPoint;
+      bool isAttacking;
+      std::unique_ptr<sf::RectangleShape> attackShape;
+      std::unique_ptr<sf::Clock> attackClock;
 
       public:
 
@@ -35,10 +38,9 @@ class Character {
       bool isMoving () const;
       void move ();
 
-      bool isAttacking;
-      void setIsAttacking (bool isAttacking) { this -> isAttacking = isAttacking; }
+      void setIsAttacking (bool isAttacking); 
+      bool getIsAttacking () { return isAttacking; }
       void attack (const sf::Vector2f& mousePos);
-      std::unique_ptr<sf::RectangleShape> attackShape;
 
       void update (const sf::Vector2f& mousePos);
       void render (sf::RenderWindow& window) const;

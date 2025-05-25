@@ -25,6 +25,18 @@ void Character::move () {
       shape.move(sf::Vector2f({direction.x / length * speed * adjustment, direction.y / length * speed * adjustment}));
 }
 
+void Character::setIsAttacking (bool isAttacking) {
+      if (this -> isAttacking && isAttacking) {
+            return;
+      }
+
+      this -> isAttacking = isAttacking;
+
+      if (isAttacking) {
+            attackClock = std::make_unique<sf::Clock>();
+      } 
+}
+
 void Character::attack (const sf::Vector2f& mousePos) {
       attackShape = std::make_unique<sf::RectangleShape>();
 
@@ -38,6 +50,10 @@ void Character::attack (const sf::Vector2f& mousePos) {
       double angleInRads = std::atan2(y, x);
       sf::Angle angle = sf::radians(angleInRads);
       attackShape -> setRotation(angle); 
+
+      if (attackClock -> getElapsedTime().asSeconds() >= 1) {
+            setIsAttacking(false);
+      }
 }
 
 void Character::update (const sf::Vector2f& mousePos) {
