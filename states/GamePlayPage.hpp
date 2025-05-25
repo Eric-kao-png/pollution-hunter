@@ -15,10 +15,10 @@ class GamePlayPage : public GameState {
       Game* game;
 
       Button quitButton;
-
       Map map;
-
       Character character;
+
+      sf::Vector2f mousePos;
 
       public:
 

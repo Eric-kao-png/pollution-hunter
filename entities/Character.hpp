@@ -13,12 +13,11 @@ class Character {
       int attackPower;
       int speed;
 
-      sf::Vector2f targetPoint;
-
       // sf::Texture texture;
       // sf::Sprite sprite;
 
       sf::RectangleShape shape;
+      sf::Vector2f targetPoint;
 
       public:
 
@@ -31,12 +30,17 @@ class Character {
       int getSpeed () const { return speed; }
       sf::Vector2f getPos () const { return shape.getPosition(); }
 
-      void setTargetPoint (const sf::Vector2f point) {targetPoint = point;}
+      void setTargetPoint (const sf::Vector2f point) { targetPoint = point; }
 
       bool isMoving () const;
       void move ();
 
-      void update ();
+      bool isAttacking;
+      void setIsAttacking (bool isAttacking) { this -> isAttacking = isAttacking; }
+      void attack (const sf::Vector2f& mousePos);
+      std::unique_ptr<sf::RectangleShape> attackShape;
+
+      void update (const sf::Vector2f& mousePos);
       void render (sf::RenderWindow& window) const;
 };
 

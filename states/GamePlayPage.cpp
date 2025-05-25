@@ -11,9 +11,10 @@ void GamePlayPage::handleInput (sf::RenderWindow &window) {
                   window.close();
             }
 
+            sf::Vector2i mousePosPixel = sf::Mouse::getPosition(window);
+            mousePos = window.mapPixelToCoords(mousePosPixel);
+
             if (const auto* mouseButtonPress = event -> getIf<sf::Event::MouseButtonPressed>()) {
-                  sf::Vector2i mousePosPixel = sf::Mouse::getPosition(window);
-                  sf::Vector2f mousePos = window.mapPixelToCoords(mousePosPixel);
 
                   if (quitButton.isClicked(mousePos)) {
                         game -> changeState(std::make_unique<MainPage>(game));
@@ -23,12 +24,25 @@ void GamePlayPage::handleInput (sf::RenderWindow &window) {
                         character.setTargetPoint(mousePos);
                   }
             }
+
+            if (const auto* keyPressed = event -> getIf<sf::Event::KeyPressed>()) {
+
+                  if (keyPressed -> code == sf::Keyboard::Key::A)  {
+                        character.setIsAttacking(true);
+                  }
+            }
+            if (const auto* keyReleased = event -> getIf<sf::Event::KeyReleased>()) {
+
+                  if (keyReleased -> code == sf::Keyboard::Key::A)  {
+                        character.setIsAttacking(false);
+                  }
+            }
       }
 }
 
 void GamePlayPage::update (sf::RenderWindow &window) {
       map.update();
-      character.update();
+      character.update(mousePos);
 }
 
 void GamePlayPage::render (sf::RenderWindow &window) {
