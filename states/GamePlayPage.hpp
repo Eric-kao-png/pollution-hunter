@@ -36,6 +36,7 @@ class GamePlayPage : public GameState {
       std::vector<Enemy> enemys;
       bool isSpawning () const;
       void enemySpawn (const Map& map);
+      sf::Vector2f getSpawningLocation (const Map& map) const;
 
       // gameover
       bool gameover;

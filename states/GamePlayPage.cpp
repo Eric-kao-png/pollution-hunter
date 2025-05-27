@@ -1,5 +1,9 @@
 #include "./GamePlayPage.hpp"
 
+namespace{
+      enum class SpawnEdge {up, right, down, left};
+}
+
 GamePlayPage::GamePlayPage(Game* game) 
       : game(game),
         quitButton({50, 50}, {100, 50}, "Quit", game -> getFont()),
@@ -34,8 +38,24 @@ bool GamePlayPage::isSpawning () const {
       return false;
 }
 
+sf::Vector2f GamePlayPage::getSpawningLocation (const Map& map) const {
+      SpawnEdge spawnEdge = static_cast<SpawnEdge>(rand() % 4);
+      switch (spawnEdge) {
+            case SpawnEdge::up:
+                  return map.getLeftUp() + sf::Vector2f({static_cast<float>(rand() % static_cast<int>(map.getSize().x)), 0}); break;
+            case SpawnEdge::right:
+                  return map.getLeftUp() + sf::Vector2f({0, static_cast<float>(rand() % static_cast<int>(map.getSize().y))}); break;
+            case SpawnEdge::down:
+                  return map.getLeftUp() + sf::Vector2f({static_cast<float>(rand() % static_cast<int>(map.getSize().x)), map.getSize().y}); break;
+            case SpawnEdge::left:
+                  return map.getLeftUp() + sf::Vector2f({map.getSize().x, static_cast<float>(rand() % static_cast<int>(map.getSize().y))}); break;
+            default:
+                  return map.getLeftUp();
+      }
+}
+
 void GamePlayPage::enemySpawn (const Map& map) {
-      enemys.emplace_back(2, 1, 1, map.getPosition() - map.getSize() / 2.f);
+      enemys.emplace_back(2, 1, 1, getSpawningLocation(map));
 }
 
 void GamePlayPage::changeScoreText () {
