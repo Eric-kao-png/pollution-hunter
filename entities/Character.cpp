@@ -2,7 +2,7 @@
 
 Character::Character(const std::string& name, int maxHealth, int attackPower, int speed, const Map& map)
     : name(name), maxHealth(maxHealth), currentHealth(maxHealth), attackPower(attackPower), speed(speed), 
-      isAttacking(false), canTakeDamage(true), isTakingDamage(false),
+      isAttacking(false), canTakeDamage(true), isTakingDamage(false), isAlive(true),
       targetPoint(map.getPos()) {
             shape.setFillColor(sf::Color::Red);
             shape.setPosition(map.getPos());
@@ -88,6 +88,13 @@ void Character::takeDamage (const Enemy& enemy) {
       takeDamageClock = std::make_unique<sf::Clock>();
 }
 
+bool Character::setIsAlive () {
+      if (currentHealth > 0) {
+            return true;
+      }
+      return false;
+}
+
 void Character::update (const sf::Vector2f& mousePos, const std::vector<Enemy>& enemys) {
       if (isMoving()) {
             move();
@@ -102,7 +109,7 @@ void Character::update (const sf::Vector2f& mousePos, const std::vector<Enemy>& 
                   takeDamage(enemy);
             }
       }
-      
+      isAlive = setIsAlive();
 }
 
 void Character::render (sf::RenderWindow& window) const {

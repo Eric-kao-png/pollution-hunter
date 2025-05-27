@@ -15,15 +15,21 @@ class Character {
       int currentHealth;
       int attackPower;
       int speed;
-
+      sf::RectangleShape shape;
       // sf::Texture texture;
       // sf::Sprite sprite;
 
-      sf::RectangleShape shape;
       sf::Vector2f targetPoint;
+
       bool isAttacking;
       std::unique_ptr<sf::RectangleShape> attackShape;
       std::unique_ptr<sf::Clock> attackClock;
+
+      bool canTakeDamage;
+      bool isTakingDamage;
+      std::unique_ptr<sf::Clock> takeDamageClock;
+
+      bool isAlive;
 
       public:
 
@@ -46,12 +52,12 @@ class Character {
       void attack (const sf::Vector2f& mousePos);
       sf::RectangleShape* getAttackShape () const ;
 
-      bool canTakeDamage;
-      bool isTakingDamage;
-      std::unique_ptr<sf::Clock> takeDamageClock;
       bool setCanTakeDamage ();
       bool setIsTakingDamage (const Enemy& enemy);
       void takeDamage (const Enemy& enemy);
+
+      bool setIsAlive ();
+      bool getIsAlive () { return isAlive; }
 
       void update (const sf::Vector2f& mousePos, const std::vector<Enemy>& enemys);
       void render (sf::RenderWindow& window) const;

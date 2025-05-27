@@ -3,7 +3,8 @@
 GamePlayPage::GamePlayPage(Game* game) 
       : game(game),
         quitButton({50, 50}, {100, 50}, "Quit", game -> getFont()), score(0), scoreText(game -> getFont(), "Score: 0"), healthText(game -> getFont()), 
-        character("Hero", 2, 1, 1, map) {
+        gameover(false),
+        character("Hero", 5, 1, 1, map) {
             std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
             scoreShape.setFillColor(sf::Color::White);
@@ -88,8 +89,8 @@ void GamePlayPage::update (sf::RenderWindow &window) {
             enemySpawn(map);
       }
       
-      for (auto it = enemys.begin(); it != enemys.end(); ++it) {
-            it -> update(character);
+      for (auto& enemy : enemys) {
+            enemy.update(character);
       }
 
       for (auto it = enemys.begin(); it != enemys.end();) {
@@ -100,6 +101,14 @@ void GamePlayPage::update (sf::RenderWindow &window) {
             } else {
                   ++it;
             }
+      }
+
+      if (!character.getIsAlive()) {
+            gameover = true;
+      }
+
+      if (gameover) {
+            game -> changeState(std::make_unique<MainPage>(game));
       }
 }
 

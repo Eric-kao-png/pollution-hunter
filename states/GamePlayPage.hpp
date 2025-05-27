@@ -16,6 +16,8 @@ class GamePlayPage : public GameState {
 
       Game* game;
 
+      sf::Vector2f mousePos;
+
       Button quitButton;
 
       sf::RectangleShape scoreShape;
@@ -33,7 +35,7 @@ class GamePlayPage : public GameState {
       bool isSpawning () const;
       void enemySpawn (const Map& map);
 
-      sf::Vector2f mousePos;
+      bool gameover;
 
       public:
 
