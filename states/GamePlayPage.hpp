@@ -16,25 +16,28 @@ class GamePlayPage : public GameState {
 
       Game* game;
 
-      sf::Vector2f mousePos;
-
+      // buttons
       Button quitButton;
 
+      // score
       sf::RectangleShape scoreShape;
       int score;
       sf::Text scoreText;
       void changeScoreText ();
 
+      // current health
       sf::RectangleShape healthShape;
       sf::Text healthText;
       void changeHealthText ();
 
+      // game objects
       Map map;
       Character character;
       std::vector<Enemy> enemys;
       bool isSpawning () const;
       void enemySpawn (const Map& map);
 
+      // gameover
       bool gameover;
 
       public:

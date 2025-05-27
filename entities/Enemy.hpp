@@ -10,44 +10,59 @@ class Character;
 class Enemy {
       private:
 
+      // basic attributes
       int maxHealth;
       int currentHealth;
       int attackPower;
       int speed;
+
+      // hitbox
       sf::RectangleShape shape;
 
+      // about moving
+      bool isMoving;
       sf::Vector2f targetPoint;
 
+      // about attacking
       bool wantToAttack;
       bool canAttack;
       std::unique_ptr<sf::Clock> attackClock;
       std::unique_ptr<sf::Clock> attackColdDown;
       std::unique_ptr<sf::RectangleShape> attackShape;
 
+      // about taking damage
       bool canTakeDamage;
+      bool isTakingDamage;
       std::unique_ptr<sf::Clock> takeDamageClock;
 
+      // about life
       bool isAlive;
 
       public:
 
       Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& startPos);
 
+      // functions about basic attributes
       int getAttackPower () const { return attackPower; }
 
+      // functions about moving
       void setTargetPoint (const Character& character);
-      bool isMoving () const;
+      bool setIsMoving () const;
       void move ();
 
-      bool setWantToAttack (const Character& character);
+      // function about attacking
+      bool setWantToAttack (const Character& character) const;
       bool setCanAttack ();
       void attack (const Character& character);
       sf::RectangleShape* getAttackShape () const;
 
-      bool isTakingDamage (const Character& character) const;
+      // funtion about taking damage
+      bool setCanTakeDamage ();
+      bool setIsTakingDamage (const Character& character) const;
       void takeDamage (const Character& character);
 
-      void setIsAlive (bool isAlive) { this -> isAlive = isAlive; }
+      // function about life
+      bool setIsAlive () const;
       bool getIsAlive () const { return isAlive; }
 
       void update (const Character& character);

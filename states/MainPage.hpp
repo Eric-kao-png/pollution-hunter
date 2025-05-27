@@ -1,5 +1,5 @@
-#ifndef MAINPAGE_H
-#define MAINPAGE_H
+#ifndef MAINPAGE_HPP
+#define MAINPAGE_HPP
 
 #include "../GameState.hpp"
 #include "../Game.hpp"
@@ -16,6 +16,7 @@ class MainPage : public GameState {
 
       Game* game;
 
+      // buttons
       Button playButton;
       Button characterButton;
       Button exitButton;
@@ -30,4 +31,4 @@ class MainPage : public GameState {
       ~MainPage () override = default;
 };
 
-#endif // MAINPAGE_H
+#endif // MAINPAGE_HPP

@@ -2,30 +2,32 @@
 
 GamePlayPage::GamePlayPage(Game* game) 
       : game(game),
-        quitButton({50, 50}, {100, 50}, "Quit", game -> getFont()), score(0), scoreText(game -> getFont(), "Score: 0"), healthText(game -> getFont()), 
+        quitButton({50, 50}, {100, 50}, "Quit", game -> getFont()),
+        score(0), scoreText(game -> getFont()),
+        healthText(game -> getFont()), 
         gameover(false),
         character("Hero", 5, 1, 1, map) {
             std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-            scoreShape.setFillColor(sf::Color::White);
-            scoreShape.setSize(sf::Vector2f({100, 50}));
             scoreShape.setPosition(sf::Vector2f({200, 500}));
+            scoreShape.setSize(sf::Vector2f({100, 50}));
+            scoreShape.setFillColor(sf::Color::White);
 
-            scoreText.setFillColor(sf::Color::Black);
-            scoreText.setCharacterSize(16);
             scoreText.setPosition(scoreShape.getPosition());
+            scoreText.setCharacterSize(16);
+            scoreText.setFillColor(sf::Color::Black);
             
-            healthShape.setFillColor(sf::Color::White);
-            healthShape.setSize(sf::Vector2f({100, 50}));
             healthShape.setPosition(sf::Vector2f({300, 500}));
+            healthShape.setSize(sf::Vector2f({100, 50}));
+            healthShape.setFillColor(sf::Color::White);
 
-            healthText.setFillColor(sf::Color::Black);
-            healthText.setCharacterSize(16);
             healthText.setPosition(healthShape.getPosition());
+            healthText.setCharacterSize(16);
+            healthText.setFillColor(sf::Color::Black);
       }
 
 bool GamePlayPage::isSpawning () const {
-      int chance = rand() % 100000;
+      int chance = rand() % 70000;
       if (chance == 1) {
             return true;
       }
@@ -33,19 +35,19 @@ bool GamePlayPage::isSpawning () const {
 }
 
 void GamePlayPage::enemySpawn (const Map& map) {
-      enemys.emplace_back(2, 1, 1, map.getPos() - map.getSize() / 2.f);
+      enemys.emplace_back(2, 1, 1, map.getPosition() - map.getSize() / 2.f);
 }
 
 void GamePlayPage::changeScoreText () {
       std::ostringstream oss;
-      oss << "Score: " << score;
+      oss << "Score: " << score << std::endl;
       std::string scoreString(oss.str());
       scoreText.setString(scoreString);
 }
 
 void GamePlayPage::changeHealthText () {
       std::ostringstream oss;
-      oss << "Health: " << character.getCurrentHealth();
+      oss << "Health: " << character.getCurrentHealth() << std::endl;
       std::string healthString(oss.str());
       healthText.setString(healthString);
 }
@@ -56,8 +58,7 @@ void GamePlayPage::handleInput (sf::RenderWindow &window) {
                   window.close();
             }
 
-            sf::Vector2i mousePosPixel = sf::Mouse::getPosition(window);
-            mousePos = window.mapPixelToCoords(mousePosPixel);
+            setMousePos(window);
 
             if (const auto* mouseButtonPress = event -> getIf<sf::Event::MouseButtonPressed>()) {
 
@@ -80,15 +81,18 @@ void GamePlayPage::handleInput (sf::RenderWindow &window) {
 }
 
 void GamePlayPage::update (sf::RenderWindow &window) {
+      // map
       map.update();
       
+      // character
       character.update(mousePos, enemys);
       changeHealthText();
 
+      // enemys
       if (isSpawning()) {
             enemySpawn(map);
       }
-      
+
       for (auto& enemy : enemys) {
             enemy.update(character);
       }
@@ -97,16 +101,16 @@ void GamePlayPage::update (sf::RenderWindow &window) {
             if (!(it -> getIsAlive())) {
                   it = enemys.erase(it);
                   score += 100;
-                  changeScoreText();
             } else {
                   ++it;
             }
       }
+      changeScoreText();
 
+      // gameover
       if (!character.getIsAlive()) {
             gameover = true;
       }
-
       if (gameover) {
             game -> changeState(std::make_unique<MainPage>(game));
       }
@@ -115,16 +119,16 @@ void GamePlayPage::update (sf::RenderWindow &window) {
 void GamePlayPage::render (sf::RenderWindow &window) {
       window.clear(sf::Color::Black);
 
-      map.render(window);
-      character.render(window);
-      for (auto& enemy : enemys) {
-            enemy.render(window);
-      }
       quitButton.render(window);
       window.draw(scoreShape);
       window.draw(scoreText);
       window.draw(healthShape);
       window.draw(healthText);
+      map.render(window);
+      character.render(window);
+      for (auto& enemy : enemys) {
+            enemy.render(window);
+      }
       
       window.display();
 }

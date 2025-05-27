@@ -2,15 +2,15 @@
 
 Character::Character(const std::string& name, int maxHealth, int attackPower, int speed, const Map& map)
     : name(name), maxHealth(maxHealth), currentHealth(maxHealth), attackPower(attackPower), speed(speed), 
-      isAttacking(false), canTakeDamage(true), isTakingDamage(false), isAlive(true),
-      targetPoint(map.getPos()) {
+      isMoving(false), isAttacking(false), canAttack(true), canTakeDamage(true), isTakingDamage(false), isAlive(true),
+      targetPoint(map.getPosition()) {
             shape.setFillColor(sf::Color::Red);
-            shape.setPosition(map.getPos());
+            shape.setPosition(map.getPosition());
             shape.setSize(sf::Vector2f({50, 50}));
             shape.setOrigin(shape.getSize() / 2.f);
       }
 
-bool Character::isMoving () const {
+bool Character::setIsMoving () const {
       if ((targetPoint.x - shape.getPosition().x) * (targetPoint.x - shape.getPosition().x) +
           (targetPoint.y - shape.getPosition().y) * (targetPoint.y - shape.getPosition().y) < speed * speed) {
             return false;
@@ -27,24 +27,32 @@ void Character::move () {
 }
 
 void Character::setIsAttacking (bool isAttacking) {
-      if (this -> isAttacking && isAttacking) {
+      if (!canAttack) {
             return;
       }
-
       this -> isAttacking = isAttacking;
+}
 
-      if (isAttacking) {
-            attackClock = std::make_unique<sf::Clock>();
-      } 
+bool Character::setCanAttack () {
+      if (attackColdDown) {
+            if (attackColdDown -> getElapsedTime().asSeconds() <= 0.5) {
+                  return false;
+            }
+            attackColdDown.reset();
+      }
+      return true;
 }
 
 void Character::attack (const sf::Vector2f& mousePos) {
-      attackShape = std::make_unique<sf::RectangleShape>();
+      if (!attackClock) {
+            attackClock = std::make_unique<sf::Clock>();
+            attackShape = std::make_unique<sf::RectangleShape>();
+      }
 
-      attackShape -> setFillColor(sf::Color::Blue);
+      attackShape -> setPosition(shape.getPosition());
       attackShape -> setSize(sf::Vector2f({70, 30}));
       attackShape -> setOrigin(sf::Vector2f({0, 15}));
-      attackShape -> setPosition(shape.getPosition());
+      attackShape -> setFillColor(sf::Color::Blue);
 
       double x = mousePos.x - shape.getPosition().x;
       double y = mousePos.y - shape.getPosition().y;
@@ -53,8 +61,10 @@ void Character::attack (const sf::Vector2f& mousePos) {
       attackShape -> setRotation(angle); 
 
       if (attackClock -> getElapsedTime().asSeconds() >= 1.5) {
-            setIsAttacking(false);
+            attackClock.reset();
             attackShape.reset();
+            attackColdDown = std::make_unique<sf::Clock>();
+            isAttacking = false;
       }
 }
 
@@ -67,17 +77,17 @@ sf::RectangleShape* Character::getAttackShape () const {
 }
 
 bool Character::setCanTakeDamage () {
-      if (takeDamageClock) {
-            if (takeDamageClock -> getElapsedTime().asSeconds() <= 2) {
+      if (takeDamageColdDown) {
+            if (takeDamageColdDown -> getElapsedTime().asSeconds() <= 2) {
                   return false;
             }
-            takeDamageClock.reset();
+            takeDamageColdDown.reset();
       }
       return true;
 }
 
-bool Character::setIsTakingDamage (const Enemy& enemy) {
-      if (enemy.getAttackShape() && enemy.getAttackShape() -> getGlobalBounds().findIntersection(shape.getGlobalBounds())) {
+bool Character::setIsTakingDamage (const Enemy& enemy) const {
+      if ((enemy.getAttackShape() != nullptr) && (enemy.getAttackShape() -> getGlobalBounds().findIntersection(shape.getGlobalBounds()))) {
             return true;      
       }
       return false;
@@ -85,10 +95,10 @@ bool Character::setIsTakingDamage (const Enemy& enemy) {
 
 void Character::takeDamage (const Enemy& enemy) {
       currentHealth -= enemy.getAttackPower();
-      takeDamageClock = std::make_unique<sf::Clock>();
+      takeDamageColdDown = std::make_unique<sf::Clock>();
 }
 
-bool Character::setIsAlive () {
+bool Character::setIsAlive () const {
       if (currentHealth > 0) {
             return true;
       }
@@ -96,25 +106,35 @@ bool Character::setIsAlive () {
 }
 
 void Character::update (const sf::Vector2f& mousePos, const std::vector<Enemy>& enemys) {
-      if (isMoving()) {
+      // move
+      isMoving = setIsMoving();
+      if (isMoving) {
             move();
       }
-      if (isAttacking) {
+
+      // attack
+      canAttack = setCanAttack();
+      if (isAttacking && canAttack) {
             attack(mousePos);
       }
+
+      // take damege
       canTakeDamage = setCanTakeDamage();
       for (auto& enemy : enemys) {
             isTakingDamage = setIsTakingDamage(enemy);
             if (canTakeDamage && isTakingDamage) {
                   takeDamage(enemy);
+                  break;
             }
       }
+
+      // life
       isAlive = setIsAlive();
 }
 
 void Character::render (sf::RenderWindow& window) const {
       window.draw(shape);
-      if (isAttacking && attackShape) {
+      if (attackShape) {
             window.draw(*attackShape);
       }
 }

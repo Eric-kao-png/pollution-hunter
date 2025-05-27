@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_HPP
+#define GAME_HPP
 
 #include <SFML/Graphics.hpp>
 #include "./GameState.hpp"
@@ -25,4 +25,4 @@ class Game {
       void changeState (std::unique_ptr<GameState> newState);
 };
 
-#endif // GAME_H
+#endif // GAME_HPP

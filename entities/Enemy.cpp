@@ -2,21 +2,21 @@
 
 Enemy::Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& startPos) 
       : maxHealth(maxHealth), currentHealth(maxHealth), attackPower(attackPower), speed(speed),
-        canTakeDamage(true), isAlive(true), wantToAttack(false),
+        isMoving(false), wantToAttack(false), canAttack(true), canTakeDamage(true), isTakingDamage(false), isAlive(true), 
         targetPoint(startPos) {
-            shape.setFillColor(sf::Color::Yellow);
-            shape.setPosition(startPos);
-            shape.setSize(sf::Vector2f({50, 50}));
-            shape.setOrigin(shape.getSize() / 2.f);
-      }
-
-void Enemy::setTargetPoint (const Character& character) {
-      targetPoint = character.getPos();
+      shape.setPosition(startPos);
+      shape.setSize(sf::Vector2f({50, 50}));
+      shape.setOrigin(shape.getSize() / 2.f);
+      shape.setFillColor(sf::Color::Yellow);
 }
 
-bool Enemy::isMoving () const{
-      if ((targetPoint.x - shape.getPosition().x) * (targetPoint.x - shape.getPosition().x) +
-          (targetPoint.y - shape.getPosition().y) * (targetPoint.y - shape.getPosition().y) < speed * speed) {
+void Enemy::setTargetPoint (const Character& character) {
+      targetPoint = character.getPosition();
+}
+
+bool Enemy::setIsMoving () const {
+      if (std::sqrt((targetPoint.x - shape.getPosition().x) * (targetPoint.x - shape.getPosition().x) +
+                    (targetPoint.y - shape.getPosition().y) * (targetPoint.y - shape.getPosition().y)) <= 50) {
             return false;
       }
       return true;
@@ -30,10 +30,10 @@ void Enemy::move () {
       shape.move(sf::Vector2f({direction.x / length * speed * adjustment, direction.y / length * speed * adjustment}));
 }
 
-bool Enemy::setWantToAttack(const Character& character) {
-      float distance = sqrt((shape.getPosition().x - character.getPos().x) * (shape.getPosition().x - character.getPos().x) + 
-                            (shape.getPosition().x - character.getPos().x) * (shape.getPosition().x - character.getPos().x));
-      if (distance <= 100) {
+bool Enemy::setWantToAttack(const Character& character) const {
+      double distance = std::sqrt((shape.getPosition().x - character.getPosition().x) * (shape.getPosition().x - character.getPosition().x) + 
+                            (shape.getPosition().x - character.getPosition().x) * (shape.getPosition().x - character.getPosition().x));
+      if (distance <= 120) {
             return true;
       }
       return false;
@@ -55,13 +55,13 @@ void Enemy::attack (const Character& character) {
             attackShape = std::make_unique<sf::RectangleShape>();
       }
 
-      attackShape -> setFillColor(sf::Color::Magenta);
+      attackShape -> setPosition(shape.getPosition());
       attackShape -> setSize(sf::Vector2f({40, 60}));
       attackShape -> setOrigin(sf::Vector2f({0, 20}));
-      attackShape -> setPosition(shape.getPosition());
+      attackShape -> setFillColor(sf::Color::Magenta);
 
-      double x = character.getPos().x - shape.getPosition().x;
-      double y = character.getPos().y - shape.getPosition().y;
+      double x = character.getPosition().x - shape.getPosition().x;
+      double y = character.getPosition().y - shape.getPosition().y;
       double angleInRads = std::atan2(y, x);
       sf::Angle angle = sf::radians(angleInRads);
       attackShape -> setRotation(angle); 
@@ -81,11 +81,19 @@ sf::RectangleShape* Enemy::getAttackShape () const {
       }
 }
 
-bool Enemy::isTakingDamage (const Character& character) const {
-      if (character.getAttackShape()) {
-            if (shape.getGlobalBounds().findIntersection(character.getAttackShape() -> getGlobalBounds())) {
-                  return true;
+bool Enemy::setCanTakeDamage () {
+      if (takeDamageClock) {
+            if (takeDamageClock -> getElapsedTime().asSeconds() <= 1) {
+                  return false;
             }
+            takeDamageClock.reset();
+      }
+      return true;
+}
+
+bool Enemy::setIsTakingDamage (const Character& character) const {
+      if ((character.getAttackShape() != nullptr) && (character.getAttackShape() -> getGlobalBounds().findIntersection(shape.getGlobalBounds()))) {
+            return true;
       }
       return false;
 }
@@ -96,38 +104,42 @@ void Enemy::takeDamage (const Character& character) {
       takeDamageClock = std::make_unique<sf::Clock>();
 }
 
+bool Enemy::setIsAlive () const {
+      if (currentHealth > 0) {
+            return true;
+      }
+      return false;
+}
+
 void Enemy::update (const Character& character) {
+      // move
       setTargetPoint(character);
-      if (isMoving()) {
+      isMoving = setIsMoving();
+      if (isMoving) {
             move();
       }
 
-      if (takeDamageClock) {
-            if (takeDamageClock -> getElapsedTime().asSeconds() >= 1) {
-                  canTakeDamage = true;
-            }
-      }
-
-      if (isAlive) {
-            if (currentHealth <= 0) {
-                  setIsAlive(false);
-            }
-      }
-
-      if (canTakeDamage && isTakingDamage(character)) {
-            takeDamage(character);
-      }
-
+      // attack
       wantToAttack = setWantToAttack(character);
       canAttack = setCanAttack();
       if (wantToAttack && canAttack) {
             attack(character);
       }
+
+      // take damage
+      canTakeDamage = setCanTakeDamage();
+      isTakingDamage = setIsTakingDamage(character);
+      if (canTakeDamage && isTakingDamage) {
+            takeDamage(character);
+      }
+
+      // live
+      isAlive = setIsAlive();
 }
 
 void Enemy::render (sf::RenderWindow& window) const {
       window.draw(shape);
-      if(attackShape && wantToAttack && canAttack) {
+      if (attackShape) {
             window.draw(*attackShape);
       }
 }

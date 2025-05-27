@@ -1,5 +1,5 @@
-#ifndef CHARACTERPAGE_H
-#define CHARACTERPAGE_H
+#ifndef CHARACTERPAGE_HPP
+#define CHARACTERPAGE_HPP
 
 #include "../GameState.hpp"
 #include "../Game.hpp"
@@ -14,6 +14,7 @@ class CharacterPage : public GameState {
 
       Game* game;
 
+      // buttons
       Button quitButton;
       
       public:
@@ -26,4 +27,4 @@ class CharacterPage : public GameState {
       ~CharacterPage () override = default;
 };
 
-#endif // CHARACTERPAGE_H
+#endif // CHARACTERPAGE_HPP

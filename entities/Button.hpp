@@ -1,5 +1,5 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef BUTTON_HPP
+#define BUTTON_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -16,8 +16,8 @@ class Button {
               const std::string& text,
               const sf::Font& font);
 
-      bool isClicked (const sf::Vector2f mousePos) const;
+      bool isClicked (const sf::Vector2f& mousePos) const;
       void render (sf::RenderWindow& window) const;
 };
 
-#endif // BUTTON_H
+#endif // BUTTON_HPP
