@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include "./Map.hpp"
+#include "./Enemy.hpp"
+
+class Enemy;
 
 class Character {
       private:
@@ -41,8 +44,16 @@ class Character {
       void setIsAttacking (bool isAttacking); 
       bool getIsAttacking () { return isAttacking; }
       void attack (const sf::Vector2f& mousePos);
+      sf::RectangleShape* getAttackShape () const ;
 
-      void update (const sf::Vector2f& mousePos);
+      bool canTakeDamage;
+      bool isTakingDamage;
+      std::unique_ptr<sf::Clock> takeDamageClock;
+      bool setCanTakeDamage ();
+      bool setIsTakingDamage (const Enemy& enemy);
+      void takeDamage (const Enemy& enemy);
+
+      void update (const sf::Vector2f& mousePos, const std::vector<Enemy>& enemys);
       void render (sf::RenderWindow& window) const;
 };
 

@@ -18,6 +18,7 @@ class Map {
       bool isClicked (const sf::Vector2f mousePos) const;
       sf::Vector2f getPos () const { return shape.getPosition(); } 
       sf::Vector2f getOrigin () const { return shape.getOrigin(); }
+      sf::Vector2f getSize () const { return shape.getSize(); }
 
       void update ();
       void render (sf::RenderWindow& window) const;

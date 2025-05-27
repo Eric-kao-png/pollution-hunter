@@ -1,11 +1,13 @@
 #ifndef GAMEPLAYPAGE_H
 #define GAMEPLAYPAGE_H
 
+#include <sstream>
 #include "../GameState.hpp"
 #include "../Game.hpp"
 #include "../entities/Button.hpp"
 #include "../entities/Character.hpp"
 #include "../entities/Map.hpp"
+#include "../entities/Enemy.hpp"
 
 class Game;
 
@@ -15,8 +17,21 @@ class GamePlayPage : public GameState {
       Game* game;
 
       Button quitButton;
+
+      sf::RectangleShape scoreShape;
+      int score;
+      sf::Text scoreText;
+      void changeScoreText ();
+
+      sf::RectangleShape healthShape;
+      sf::Text healthText;
+      void changeHealthText ();
+
       Map map;
       Character character;
+      std::vector<Enemy> enemys;
+      bool isSpawning () const;
+      void enemySpawn (const Map& map);
 
       sf::Vector2f mousePos;
 
