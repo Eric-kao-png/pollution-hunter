@@ -6,7 +6,7 @@ Character::Character(const std::string& name, int maxHealth, int attackPower, in
       targetPoint(map.getPosition()) {
             shape.setFillColor(sf::Color::Red);
             shape.setPosition(map.getPosition());
-            shape.setSize(sf::Vector2f({50, 50}));
+            shape.setSize(sf::Vector2f({CHARACTER_SIZE, CHARACTER_SIZE}));
             shape.setOrigin(shape.getSize() / 2.f);
       }
 
@@ -50,8 +50,8 @@ void Character::attack (const sf::Vector2f& mousePos) {
       }
 
       attackShape -> setPosition(shape.getPosition());
-      attackShape -> setSize(sf::Vector2f({70, 30}));
-      attackShape -> setOrigin(sf::Vector2f({0, 15}));
+      attackShape -> setSize(sf::Vector2f({CHARACTER_ATTACK_WIDTH, CHARACTER_ATTACK_HEIGHT}));
+      attackShape -> setOrigin(sf::Vector2f({0, CHARACTER_ATTACK_HEIGHT / 2.f}));
       attackShape -> setFillColor(sf::Color::Blue);
 
       double x = mousePos.x - shape.getPosition().x;

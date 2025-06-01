@@ -7,6 +7,9 @@
 #include "../entities/Character.hpp"
 #include "./MainPage.hpp"
 
+constexpr int CHARACTER_PAGE_WIDTH = 128 * 6;
+constexpr int CHARACTER_PAGE_HEIGHT = 128 * 6;
+
 class Game;
 
 class CharacterPage : public GameState {

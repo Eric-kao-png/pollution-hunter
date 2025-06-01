@@ -9,6 +9,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+constexpr int MAINPAGE_WIDTH = 128 * 6;
+constexpr int MAINPAGE_HEIGHT = 128 * 6;
+
 class Game;
 
 class MainPage : public GameState {

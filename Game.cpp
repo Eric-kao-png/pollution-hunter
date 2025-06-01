@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game () : font("./assets/ARIAL.TTF"), window(sf::VideoMode({800, 600}), "Game Window"), currentState(std::make_unique<MainPage>(this)) {
+Game::Game () : font("./assets/ARIAL.TTF"), window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "Game Window"), currentState(std::make_unique<MainPage>(this)) {
       if (!font.openFromFile("./assets/ARIAL.TTF")) {
             throw std::runtime_error("Error loading font");
       }

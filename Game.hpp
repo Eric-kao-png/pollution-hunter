@@ -6,6 +6,9 @@
 #include "./states/MainPage.hpp"
 #include "./states/CharacterPage.hpp"
 
+constexpr int WINDOW_WIDTH = 128 * 6;
+constexpr int WINDOW_HEIGHT = 128 * 6;
+
 class MainPage;
 
 class Game {

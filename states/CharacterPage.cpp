@@ -2,7 +2,7 @@
 
 CharacterPage::CharacterPage (Game* game)
       : game(game),
-        quitButton({600, 400}, {100, 50}, "Quit", game -> getFont()) {}
+        quitButton({CHARACTER_PAGE_WIDTH / 2.f, CHARACTER_PAGE_HEIGHT * 6 / 8}, {500, 50}, "Quit", game -> getFont()) {}
 
 void CharacterPage::handleInput(sf::RenderWindow &window) {
       while (const std::optional event = window.pollEvent()) {
@@ -11,7 +11,7 @@ void CharacterPage::handleInput(sf::RenderWindow &window) {
             }
 
             if (event -> is<sf::Event::MouseButtonReleased>()) {
-                  setMousePos(window);
+                  setMousePos(window, window.getDefaultView());
 
                   if (quitButton.isClicked(mousePos)) {
                         game -> changeState(std::make_unique<MainPage>(game));

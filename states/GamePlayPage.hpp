@@ -9,12 +9,25 @@
 #include "../entities/Map.hpp"
 #include "../entities/Enemy.hpp"
 
+constexpr int GAMEPLAY_PAGE_WIDTH = 128 * 6;
+constexpr int GAMEPLAY_PAGE_HEIGHT = 128 * 6;
+constexpr int BUTTON_WIDTH = 100;
+constexpr int BUTTON_HEIGHT = 50;
+constexpr int SCORE_SHAPE_WIDTH = 100;
+constexpr int SCORE_SHAPE_HEIGHT = 50;
+constexpr int HEALTH_SHAPE_WIDTH = 100;
+constexpr int HEALTH_SHAPE_HEIGHT = 50;
+
 class Game;
 
 class GamePlayPage : public GameState {
       private:
 
       Game* game;
+
+      // view
+      sf::View characterView;
+      void moveCharacterView ();
 
       // buttons
       Button quitButton;

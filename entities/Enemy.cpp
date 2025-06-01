@@ -5,7 +5,7 @@ Enemy::Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& sta
         isMoving(false), wantToAttack(false), canAttack(true), canTakeDamage(true), isTakingDamage(false), isAlive(true), 
         targetPoint(startPos) {
       shape.setPosition(startPos);
-      shape.setSize(sf::Vector2f({50, 50}));
+      shape.setSize(sf::Vector2f({ENEMY_SIZE, ENEMY_SIZE}));
       shape.setOrigin(shape.getSize() / 2.f);
       shape.setFillColor(sf::Color::Yellow);
 }
@@ -16,7 +16,7 @@ void Enemy::setTargetPoint (const Character& character) {
 
 bool Enemy::setIsMoving () const {
       if (std::sqrt((targetPoint.x - shape.getPosition().x) * (targetPoint.x - shape.getPosition().x) +
-                    (targetPoint.y - shape.getPosition().y) * (targetPoint.y - shape.getPosition().y)) <= 50) {
+                    (targetPoint.y - shape.getPosition().y) * (targetPoint.y - shape.getPosition().y)) <= 64) {
             return false;
       }
       return true;
@@ -33,7 +33,7 @@ void Enemy::move () {
 bool Enemy::setWantToAttack(const Character& character) const {
       double distance = std::sqrt((shape.getPosition().x - character.getPosition().x) * (shape.getPosition().x - character.getPosition().x) + 
                             (shape.getPosition().x - character.getPosition().x) * (shape.getPosition().x - character.getPosition().x));
-      if (distance <= 120) {
+      if (distance <= 150) {
             return true;
       }
       return false;
@@ -56,8 +56,8 @@ void Enemy::attack (const Character& character) {
       }
 
       attackShape -> setPosition(shape.getPosition());
-      attackShape -> setSize(sf::Vector2f({40, 60}));
-      attackShape -> setOrigin(sf::Vector2f({0, 20}));
+      attackShape -> setSize(sf::Vector2f({ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT}));
+      attackShape -> setOrigin(sf::Vector2f({0, ENEMY_ATTACK_HEIGHT / 2.f}));
       attackShape -> setFillColor(sf::Color::Magenta);
 
       double x = character.getPosition().x - shape.getPosition().x;

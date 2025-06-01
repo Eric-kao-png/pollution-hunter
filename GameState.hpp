@@ -7,7 +7,7 @@ class GameState {
       protected:
 
       sf::Vector2f mousePos;
-      const sf::Vector2f& setMousePos (const sf::RenderWindow& window);
+      const sf::Vector2f& setMousePos (const sf::RenderWindow& window, const sf::View& currentView);
 
       public:
 

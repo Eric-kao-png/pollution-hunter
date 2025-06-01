@@ -2,15 +2,15 @@
 
 // Map::Map (const sf::Texture& texture) : texture(texture), sprite(this -> texture) {}
 
-Map::Map () {
-      shape.setPosition(sf::Vector2f({400, 300}));
-      shape.setSize(sf::Vector2f({600, 400}));
-      shape.setOrigin(shape.getSize() / 2.f);
-      shape.setFillColor(sf::Color::Green);
+Map::Map () : mapTexture("./assets/map.png"), mapSprite(mapTexture) {
+      mapSprite.setPosition(sf::Vector2f({0, 0}));
+      // shape.setSize(sf::Vector2f({MAP_SIZE, MAP_SIZE}));
+      mapSprite.setOrigin(mapSprite.getGlobalBounds().size / 2.f);
+      // shape.setFillColor(sf::Color::Green);
 }
 
 bool Map::isClicked (const sf::Vector2f mousePos) const {
-      return shape.getGlobalBounds().contains(mousePos);
+      return mapSprite.getGlobalBounds().contains(mousePos);
 }
 
 void Map::update () {
@@ -18,5 +18,5 @@ void Map::update () {
 }
 
 void Map::render (sf::RenderWindow& window) const {
-      window.draw(shape);
+      window.draw(mapSprite);
 }

@@ -5,6 +5,10 @@
 #include "./Map.hpp"
 #include "./Character.hpp"
 
+constexpr int ENEMY_SIZE = 64;
+constexpr int ENEMY_ATTACK_WIDTH = 48;
+constexpr int ENEMY_ATTACK_HEIGHT = 64;
+
 class Character;
 
 class Enemy {

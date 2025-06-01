@@ -2,9 +2,9 @@
 
 MainPage::MainPage (Game* game) 
     : game(game),
-      playButton({200, 400}, {100, 50}, "Play", game -> getFont()),
-      characterButton({400, 400}, {100, 50}, "Character", game -> getFont()),
-      exitButton({600, 400}, {100 ,50}, "Exit", game -> getFont()) {}
+      playButton({MAINPAGE_WIDTH / 2.f, MAINPAGE_HEIGHT * 3 / 8}, {500, 50}, "Play", game -> getFont()),
+      characterButton({MAINPAGE_WIDTH / 2.f, MAINPAGE_HEIGHT * 4.5 / 8}, {500, 50}, "Character", game -> getFont()),
+      exitButton({MAINPAGE_WIDTH / 2.f, MAINPAGE_HEIGHT * 6 / 8}, {500, 50}, "Exit", game -> getFont()) {}
 
 void MainPage::handleInput (sf::RenderWindow &window) {
     while (const std::optional event = window.pollEvent()) {
@@ -13,7 +13,7 @@ void MainPage::handleInput (sf::RenderWindow &window) {
         }
 
         if (event -> is<sf::Event::MouseButtonReleased>()) {
-            setMousePos(window);
+            setMousePos(window, window.getDefaultView());
 
             if (playButton.isClicked(mousePos)) {
                 game -> changeState(std::make_unique<GamePlayPage>(game));
