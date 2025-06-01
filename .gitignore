@@ -9,6 +9,9 @@
 *.a
 *.so
 *.dll
+*.png
+*.TTF
+*.csv
 
 # VSCode 設定資料夾
 .vscode/
