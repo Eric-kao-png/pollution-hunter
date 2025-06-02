@@ -1,12 +1,13 @@
-#ifndef DATA_MANAGERAGER_HPP
-#define DATA_MANAGERAGER_HPP
+#ifndef DATA_MANAGER_HPP
+#define DATA_MANAGER_HPP
 
 #include <fstream>
 #include <string>
+#include <sstream>
 
 #define DATA_PATH "./getPM25/PM25_Tainan.csv" 
 
-enum class Difficulity {easy, midium, hard, very_hard};
+enum class Difficulty {easy, midium, hard, very_hard};
 
 class DataManager {
       private:
@@ -14,16 +15,16 @@ class DataManager {
       std::ifstream fs;
       std::string date;
       float pm25;
-      Difficulity difficulity;
+      Difficulty difficulty;
 
       void loadData ();
-      Difficulity determineDifficulity ();
+      Difficulty determineDifficulty ();
 
       public:
 
       DataManager ();
 
-      Difficulity getDifficulity () const { return difficulity; }
+      Difficulty getDifficulty () const { return difficulty; }
 };
 
-#endif // DATA_MANAGERAGER_HPP
+#endif // DATA_MANAGER_HPP

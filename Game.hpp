@@ -5,6 +5,7 @@
 #include "./GameState.hpp"
 #include "./states/MainPage.hpp"
 #include "./states/CharacterPage.hpp"
+#include "DataManager.hpp"
 
 constexpr int WINDOW_WIDTH = 128 * 6;
 constexpr int WINDOW_HEIGHT = 128 * 6;
@@ -17,6 +18,7 @@ class Game {
       sf::Font font;
       sf::RenderWindow window;
       std::unique_ptr<GameState> currentState;
+      Difficulty difficulty;
 
       public:
 
@@ -26,6 +28,7 @@ class Game {
 
       void run ();
       void changeState (std::unique_ptr<GameState> newState);
+      Difficulty getdifficulty () const { return difficulty; }
 };
 
 #endif // GAME_HPP

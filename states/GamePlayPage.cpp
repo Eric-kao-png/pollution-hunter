@@ -6,10 +6,10 @@ namespace{
 
 GamePlayPage::GamePlayPage(Game* game) 
       : game(game),
-        
         quitButton({BUTTON_WIDTH / 2.f, WINDOW_HEIGHT - BUTTON_HEIGHT / 2.f}, {BUTTON_WIDTH, BUTTON_HEIGHT}, "Quit", game -> getFont()),
         score(0), scoreText(game -> getFont()),
         healthText(game -> getFont()), 
+        difficultyText(game -> getFont()),
         gameover(false),
         map(), character("Hero", 5, 1, 1, map) {
 
@@ -36,6 +36,27 @@ GamePlayPage::GamePlayPage(Game* game)
             healthText.setPosition(healthShape.getPosition() - sf::Vector2f({HEALTH_SHAPE_WIDTH / 2.f - 20, healthText.getGlobalBounds().size.y / 2.f}));
             healthText.setCharacterSize(16);
             healthText.setFillColor(sf::Color::Black);
+
+            difficultyShape.setPosition(sf::Vector2f({GAMEPLAY_PAGE_WIDTH - DIFFICULTY_SHAPE_WIDTH / 2.f, GAMEPLAY_PAGE_HEIGHT - DIFFICULTY_SHAPE_HEIGHT / 2.f - SCORE_SHAPE_HEIGHT - HEALTH_SHAPE_HEIGHT}));
+            difficultyShape.setSize(sf::Vector2f({DIFFICULTY_SHAPE_WIDTH, DIFFICULTY_SHAPE_HEIGHT}));
+            difficultyShape.setOrigin(difficultyShape.getSize() / 2.f);
+            difficultyShape.setFillColor(sf::Color::White);
+
+            difficultyText.setPosition(difficultyShape.getPosition() - sf::Vector2f({DIFFICULTY_SHAPE_WIDTH / 2.f - 20, difficultyText.getGlobalBounds().size.y / 2.f}));
+            difficultyText.setCharacterSize(16);
+            difficultyText.setFillColor(sf::Color::Black);
+            switch (game -> getdifficulty()) {
+                  case Difficulty::easy:
+                  difficultyText.setString("Difficulty:\neasy"); break;
+                  case Difficulty::midium:
+                  difficultyText.setString("Difficulty:\nmidium"); break;
+                  case Difficulty::hard:
+                  difficultyText.setString("Difficulty:\nhard"); break;
+                  case Difficulty::very_hard:
+                  difficultyText.setString("Difficulty:\nvery hard"); break;
+                  default:
+                  difficultyText.setString("Difficulty:\neasy");
+            }
       }
 
 void GamePlayPage::moveCharacterView () {
@@ -67,7 +88,16 @@ sf::Vector2f GamePlayPage::getSpawningLocation (const Map& map) const {
 }
 
 void GamePlayPage::enemySpawn (const Map& map) {
-      enemys.emplace_back(2, 1, 1, getSpawningLocation(map));
+      if (game -> getdifficulty() == Difficulty::easy) {
+            enemys.emplace_back(2, 1, 1, getSpawningLocation(map));
+      } else if (game -> getdifficulty() == Difficulty::midium) {
+            enemys.emplace_back(3, 1, 1, getSpawningLocation(map));
+      } else if (game -> getdifficulty() == Difficulty::hard) {
+            enemys.emplace_back(3, 2, 2, getSpawningLocation(map));
+      } else {
+            enemys.emplace_back(5, 2, 2, getSpawningLocation(map));
+      }
+      
 }
 
 void GamePlayPage::changeScoreText () {
@@ -167,7 +197,8 @@ void GamePlayPage::render (sf::RenderWindow &window) {
       window.draw(scoreText);
       window.draw(healthShape);
       window.draw(healthText);
-
+      window.draw(difficultyShape);
+      window.draw(difficultyText);
       
       window.display();
 }

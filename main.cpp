@@ -9,8 +9,6 @@ int main (void) {
             std::cout << "✅ 成功執行 Python 腳本！" << std::endl;
       }
 
-      
-
       Game game;
       game.run();
 

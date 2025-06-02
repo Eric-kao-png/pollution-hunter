@@ -7,6 +7,9 @@ Game::Game () : font("./assets/ARIAL.TTF"), window(sf::VideoMode({WINDOW_WIDTH, 
 }
 
 void Game::run () {
+      DataManager dataManager;
+      difficulty = dataManager.getDifficulty();
+
       while (window.isOpen()) {
             currentState -> handleInput(window);
             currentState -> update(window);

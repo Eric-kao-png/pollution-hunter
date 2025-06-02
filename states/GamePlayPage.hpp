@@ -8,6 +8,7 @@
 #include "../entities/Character.hpp"
 #include "../entities/Map.hpp"
 #include "../entities/Enemy.hpp"
+#include "../DataManager.hpp"
 
 constexpr int GAMEPLAY_PAGE_WIDTH = 128 * 6;
 constexpr int GAMEPLAY_PAGE_HEIGHT = 128 * 6;
@@ -17,6 +18,8 @@ constexpr int SCORE_SHAPE_WIDTH = 100;
 constexpr int SCORE_SHAPE_HEIGHT = 50;
 constexpr int HEALTH_SHAPE_WIDTH = 100;
 constexpr int HEALTH_SHAPE_HEIGHT = 50;
+constexpr int DIFFICULTY_SHAPE_WIDTH = 100;
+constexpr int DIFFICULTY_SHAPE_HEIGHT = 50;
 
 class Game;
 
@@ -42,6 +45,10 @@ class GamePlayPage : public GameState {
       sf::RectangleShape healthShape;
       sf::Text healthText;
       void changeHealthText ();
+
+      // difficulty
+      sf::RectangleShape difficultyShape;
+      sf::Text difficultyText;
 
       // game objects
       Map map;
