@@ -133,8 +133,8 @@ void Character::update (const sf::Vector2f& mousePos, const std::vector<Enemy>& 
 }
 
 void Character::render (sf::RenderWindow& window) const {
-      window.draw(shape);
       if (attackShape) {
             window.draw(*attackShape);
       }
+      window.draw(shape);
 }

@@ -24,7 +24,7 @@ GamePlayPage::GamePlayPage(Game* game)
             scoreShape.setOrigin(scoreShape.getSize() / 2.f);
             scoreShape.setFillColor(sf::Color::White);
 
-            scoreText.setPosition(scoreShape.getPosition() - sf::Vector2f({SCORE_SHAPE_WIDTH / 2.f - 20, scoreText.getGlobalBounds().size.y / 2.f}));
+            scoreText.setPosition(scoreShape.getPosition() - sf::Vector2f({SCORE_SHAPE_WIDTH / 2.f - 10, scoreText.getGlobalBounds().size.y / 2.f}));
             scoreText.setCharacterSize(16);
             scoreText.setFillColor(sf::Color::Black);
             
@@ -33,7 +33,7 @@ GamePlayPage::GamePlayPage(Game* game)
             healthShape.setOrigin(healthShape.getSize() / 2.f);
             healthShape.setFillColor(sf::Color::White);
 
-            healthText.setPosition(healthShape.getPosition() - sf::Vector2f({HEALTH_SHAPE_WIDTH / 2.f - 20, healthText.getGlobalBounds().size.y / 2.f}));
+            healthText.setPosition(healthShape.getPosition() - sf::Vector2f({HEALTH_SHAPE_WIDTH / 2.f - 10, healthText.getGlobalBounds().size.y / 2.f}));
             healthText.setCharacterSize(16);
             healthText.setFillColor(sf::Color::Black);
 
@@ -42,7 +42,7 @@ GamePlayPage::GamePlayPage(Game* game)
             difficultyShape.setOrigin(difficultyShape.getSize() / 2.f);
             difficultyShape.setFillColor(sf::Color::White);
 
-            difficultyText.setPosition(difficultyShape.getPosition() - sf::Vector2f({DIFFICULTY_SHAPE_WIDTH / 2.f - 20, difficultyText.getGlobalBounds().size.y / 2.f}));
+            difficultyText.setPosition(difficultyShape.getPosition() - sf::Vector2f({DIFFICULTY_SHAPE_WIDTH / 2.f - 10, difficultyText.getGlobalBounds().size.y / 2.f}));
             difficultyText.setCharacterSize(16);
             difficultyText.setFillColor(sf::Color::Black);
             switch (game -> getdifficulty()) {
@@ -188,8 +188,8 @@ void GamePlayPage::render (sf::RenderWindow &window) {
       map.render(window);
       character.render(window);
       for (auto& enemy : enemys) {
-            window.draw(enemy);
             enemy.render(window);
+            window.draw(enemy);
       }
 
       window.setView(window.getDefaultView());

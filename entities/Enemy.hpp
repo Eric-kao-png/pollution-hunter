@@ -13,6 +13,8 @@ constexpr int ENEMY_ATTACK_HEIGHT = 64;
 
 class Character;
 
+enum class Direction {front, right, back, left};
+
 class Enemy : public AnimatedSprite {
       private:
 
@@ -25,6 +27,13 @@ class Enemy : public AnimatedSprite {
       // about moving
       bool isMoving;
       sf::Vector2f targetPoint;
+      Direction direction;
+
+      Direction determineDirection () const;
+
+      void setTargetPoint (const Character& character);
+      bool setIsMoving () const;
+      void run ();
 
       // about attacking
       bool wantToAttack;
@@ -33,10 +42,18 @@ class Enemy : public AnimatedSprite {
       std::unique_ptr<sf::Clock> attackColdDown;
       std::unique_ptr<sf::RectangleShape> attackShape;
 
+      bool setWantToAttack (const Character& character) const;
+      bool setCanAttack ();
+      void attack (const Character& character);
+
       // about taking damage
       bool canTakeDamage;
       bool isTakingDamage;
       std::unique_ptr<sf::Clock> takeDamageClock;
+
+      bool setCanTakeDamage ();
+      bool setIsTakingDamage (const Character& character) const;
+      void takeDamage (const Character& character);
 
       // about life
       bool isAlive;
@@ -45,27 +62,10 @@ class Enemy : public AnimatedSprite {
 
       Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& startPos);
 
-      // functions about basic attributes
-      int getAttackPower () const { return attackPower; }
-
-      // functions about moving
-      void setTargetPoint (const Character& character);
-      bool setIsMoving () const;
-      void run ();
-
-      // function about attacking
-      bool setWantToAttack (const Character& character) const;
-      bool setCanAttack ();
-      void attack (const Character& character);
-      sf::RectangleShape* getAttackShape () const;
-
-      // funtion about taking damage
-      bool setCanTakeDamage ();
-      bool setIsTakingDamage (const Character& character) const;
-      void takeDamage (const Character& character);
-
-      // function about life
       bool setIsAlive () const;
+
+      int getAttackPower () const { return attackPower; }
+      sf::RectangleShape* getAttackShape () const;
       bool getIsAlive () const { return isAlive; }
 
       void update (const Character& character, float deltaTime);

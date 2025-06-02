@@ -1,6 +1,6 @@
 #include "AnimatedSprite.hpp"
 
-AnimatedSprite::AnimatedSprite () : initTexture("./assets/m-front1.png"), sf::Sprite(initTexture) {
+AnimatedSprite::AnimatedSprite () : initTexture("./assets/m-front1.png"), sf::Sprite(initTexture, sf::IntRect({0, 0}, {64, 64})) {
       addAnimation("frontRun", "./assets/m-front.png", Animation(0, 0, 64, 64, 3, 0.2));
       addAnimation("rightRun", "./assets/m-right.png", Animation(0, 0, 64, 64, 2, 0.2));
       addAnimation("backRun", "./assets/m-back.png", Animation(0, 0, 64, 64, 3, 0.2));
@@ -21,6 +21,7 @@ void AnimatedSprite::play (const std::string& animationName) {
       }
       currentAnimation = animationName;
       setTexture(textures.at(animationName));
+      setOrigin(getGlobalBounds().size / 2.f);
       animations.at(animationName).reset();
 }
 

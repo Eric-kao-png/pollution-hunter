@@ -13,9 +13,26 @@ void Enemy::setTargetPoint (const Character& character) {
       targetPoint = character.getPosition();
 }
 
+Direction Enemy::determineDirection () const {
+      double deltaX = targetPoint.x - getPosition().x;
+      double deltaY = targetPoint.y - getPosition().y;
+      double angleInRads = std::atan2(deltaY, deltaX);
+
+      if (-3 * M_PI / 4 <= angleInRads && angleInRads < -1 * M_PI / 4) {
+            return Direction::back;
+      } else if (-1 * M_PI / 4 <= angleInRads && angleInRads < M_PI / 4) {
+            return Direction::right;
+      } else if (M_PI / 4 <= angleInRads && angleInRads < 3 * M_PI / 4) {
+            return Direction::front;
+      } else {
+            return Direction::left;
+      }
+}
+      
+
 bool Enemy::setIsMoving () const {
-      if (std::sqrt((targetPoint.x - getGlobalBounds().size.x) * (targetPoint.x - getGlobalBounds().size.x) +
-                    (targetPoint.y - getGlobalBounds().size.y) * (targetPoint.y - getGlobalBounds().size.y)) <= 64) {
+      if (std::sqrt((targetPoint.x - getPosition().x) * (targetPoint.x - getPosition().x) +
+                    (targetPoint.y - getPosition().y) * (targetPoint.y - getPosition().y)) <= 64) {
             return false;
       }
       return true;
@@ -113,12 +130,23 @@ bool Enemy::setIsAlive () const {
 void Enemy::update (const Character& character, float deltaTime) {
       // move
       setTargetPoint(character);
+      direction = determineDirection();
       isMoving = setIsMoving();
       if (isMoving) {
             run();
       }
-      play("frontRun");
 
+      switch (direction) {
+            case Direction::front:
+            play("frontRun"); break;
+            case Direction::right:
+            play("rightRun"); break;
+            case Direction::back:
+            play("backRun"); break;
+            case Direction::left:
+            play("leftRun"); break;
+      }
+      
       // attack
       wantToAttack = setWantToAttack(character);
       canAttack = setCanAttack();
