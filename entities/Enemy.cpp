@@ -3,11 +3,10 @@
 Enemy::Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& startPos) 
       : maxHealth(maxHealth), currentHealth(maxHealth), attackPower(attackPower), speed(speed),
         isMoving(false), wantToAttack(false), canAttack(true), canTakeDamage(true), isTakingDamage(false), isAlive(true), 
-        targetPoint(startPos) {
-      shape.setPosition(startPos);
-      shape.setSize(sf::Vector2f({ENEMY_SIZE, ENEMY_SIZE}));
-      shape.setOrigin(shape.getSize() / 2.f);
-      shape.setFillColor(sf::Color::Yellow);
+        targetPoint(startPos),
+        AnimatedSprite() {
+      setPosition(startPos);
+      setOrigin(getGlobalBounds().size / 2.f);
 }
 
 void Enemy::setTargetPoint (const Character& character) {
@@ -15,24 +14,24 @@ void Enemy::setTargetPoint (const Character& character) {
 }
 
 bool Enemy::setIsMoving () const {
-      if (std::sqrt((targetPoint.x - shape.getPosition().x) * (targetPoint.x - shape.getPosition().x) +
-                    (targetPoint.y - shape.getPosition().y) * (targetPoint.y - shape.getPosition().y)) <= 64) {
+      if (std::sqrt((targetPoint.x - getGlobalBounds().size.x) * (targetPoint.x - getGlobalBounds().size.x) +
+                    (targetPoint.y - getGlobalBounds().size.y) * (targetPoint.y - getGlobalBounds().size.y)) <= 64) {
             return false;
       }
       return true;
 }
 
-void Enemy::move () {
-      sf::Vector2f direction({targetPoint.x - shape.getPosition().x, targetPoint.y - shape.getPosition().y});
+void Enemy::run () {
+      sf::Vector2f direction({targetPoint.x - getPosition().x, targetPoint.y - getPosition().y});
       float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
       float adjustment = 0.011;
-      shape.move(sf::Vector2f({direction.x / length * speed * adjustment, direction.y / length * speed * adjustment}));
+      move(sf::Vector2f({direction.x / length * speed * adjustment, direction.y / length * speed * adjustment}));
 }
 
 bool Enemy::setWantToAttack(const Character& character) const {
-      double distance = std::sqrt((shape.getPosition().x - character.getPosition().x) * (shape.getPosition().x - character.getPosition().x) + 
-                            (shape.getPosition().x - character.getPosition().x) * (shape.getPosition().x - character.getPosition().x));
+      double distance = std::sqrt((getPosition().x - character.getPosition().x) * (getPosition().x - character.getPosition().x) + 
+                            (getPosition().x - character.getPosition().x) * (getPosition().x - character.getPosition().x));
       if (distance <= 150) {
             return true;
       }
@@ -55,13 +54,13 @@ void Enemy::attack (const Character& character) {
             attackShape = std::make_unique<sf::RectangleShape>();
       }
 
-      attackShape -> setPosition(shape.getPosition());
+      attackShape -> setPosition(getPosition());
       attackShape -> setSize(sf::Vector2f({ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT}));
       attackShape -> setOrigin(sf::Vector2f({0, ENEMY_ATTACK_HEIGHT / 2.f}));
       attackShape -> setFillColor(sf::Color::Magenta);
 
-      double x = character.getPosition().x - shape.getPosition().x;
-      double y = character.getPosition().y - shape.getPosition().y;
+      double x = character.getPosition().x - getPosition().x;
+      double y = character.getPosition().y - getPosition().y;
       double angleInRads = std::atan2(y, x);
       sf::Angle angle = sf::radians(angleInRads);
       attackShape -> setRotation(angle); 
@@ -92,7 +91,7 @@ bool Enemy::setCanTakeDamage () {
 }
 
 bool Enemy::setIsTakingDamage (const Character& character) const {
-      if ((character.getAttackShape() != nullptr) && (character.getAttackShape() -> getGlobalBounds().findIntersection(shape.getGlobalBounds()))) {
+      if ((character.getAttackShape() != nullptr) && (character.getAttackShape() -> getGlobalBounds().findIntersection(getGlobalBounds()))) {
             return true;
       }
       return false;
@@ -111,18 +110,20 @@ bool Enemy::setIsAlive () const {
       return false;
 }
 
-void Enemy::update (const Character& character) {
+void Enemy::update (const Character& character, float deltaTime) {
       // move
       setTargetPoint(character);
       isMoving = setIsMoving();
       if (isMoving) {
-            move();
+            run();
       }
+      play("frontRun");
 
       // attack
       wantToAttack = setWantToAttack(character);
       canAttack = setCanAttack();
       if (wantToAttack && canAttack) {
+            // play("attack");
             attack(character);
       }
 
@@ -133,12 +134,13 @@ void Enemy::update (const Character& character) {
             takeDamage(character);
       }
 
+      AnimatedSprite::update(deltaTime);
+
       // live
       isAlive = setIsAlive();
 }
 
 void Enemy::render (sf::RenderWindow& window) const {
-      window.draw(shape);
       if (attackShape) {
             window.draw(*attackShape);
       }

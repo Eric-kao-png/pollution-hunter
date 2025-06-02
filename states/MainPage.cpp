@@ -30,7 +30,7 @@ void MainPage::handleInput (sf::RenderWindow &window) {
     }
 }
 
-void MainPage::update (sf::RenderWindow &window) {
+void MainPage::update (sf::RenderWindow &window, float deltaTime) {
     
 }
 

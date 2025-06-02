@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "./Map.hpp"
 #include "./Character.hpp"
+#include "./AnimatedSprite.hpp"
+#include <iostream>
 
 constexpr int ENEMY_SIZE = 64;
 constexpr int ENEMY_ATTACK_WIDTH = 48;
@@ -11,7 +13,7 @@ constexpr int ENEMY_ATTACK_HEIGHT = 64;
 
 class Character;
 
-class Enemy {
+class Enemy : public AnimatedSprite {
       private:
 
       // basic attributes
@@ -19,9 +21,6 @@ class Enemy {
       int currentHealth;
       int attackPower;
       int speed;
-
-      // hitbox
-      sf::RectangleShape shape;
 
       // about moving
       bool isMoving;
@@ -52,7 +51,7 @@ class Enemy {
       // functions about moving
       void setTargetPoint (const Character& character);
       bool setIsMoving () const;
-      void move ();
+      void run ();
 
       // function about attacking
       bool setWantToAttack (const Character& character) const;
@@ -69,7 +68,7 @@ class Enemy {
       bool setIsAlive () const;
       bool getIsAlive () const { return isAlive; }
 
-      void update (const Character& character);
+      void update (const Character& character, float deltaTime);
       void render (sf::RenderWindow& window) const;
 };
 

@@ -25,7 +25,7 @@ class CharacterPage : public GameState {
       CharacterPage (Game* game);
 
       void handleInput(sf::RenderWindow &window) override;
-      void update(sf::RenderWindow &window) override;
+      void update(sf::RenderWindow &window, float deltaTime) override;
       void render(sf::RenderWindow &window) override;
       ~CharacterPage () override = default;
 };

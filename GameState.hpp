@@ -12,7 +12,7 @@ class GameState {
       public:
 
       virtual void handleInput (sf::RenderWindow &window) = 0;
-      virtual void update (sf::RenderWindow &window) = 0;
+      virtual void update (sf::RenderWindow &window, float deltaTime) = 0;
       virtual void render (sf::RenderWindow &window) = 0;
       virtual ~GameState () = default;
 };

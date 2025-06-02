@@ -20,7 +20,7 @@ void CharacterPage::handleInput(sf::RenderWindow &window) {
       }
 }
 
-void CharacterPage::update(sf::RenderWindow &window) {
+void CharacterPage::update(sf::RenderWindow &window, float deltaTime) {
       
 }
 

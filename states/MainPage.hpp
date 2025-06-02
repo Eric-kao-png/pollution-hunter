@@ -29,7 +29,7 @@ class MainPage : public GameState {
       MainPage(Game* game);
 
       void handleInput(sf::RenderWindow &window) override;
-      void update(sf::RenderWindow &window) override;
+      void update(sf::RenderWindow &window, float deltaTime) override;
       void render(sf::RenderWindow &window) override;
       ~MainPage () override = default;
 };

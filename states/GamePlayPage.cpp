@@ -143,7 +143,7 @@ void GamePlayPage::handleInput (sf::RenderWindow &window) {
       }
 }
 
-void GamePlayPage::update (sf::RenderWindow &window) {
+void GamePlayPage::update (sf::RenderWindow &window, float deltaTime) {
       // map
       map.update();
       
@@ -159,7 +159,7 @@ void GamePlayPage::update (sf::RenderWindow &window) {
       }
 
       for (auto& enemy : enemys) {
-            enemy.update(character);
+            enemy.update(character, deltaTime);
       }
 
       for (auto it = enemys.begin(); it != enemys.end();) {
@@ -188,6 +188,7 @@ void GamePlayPage::render (sf::RenderWindow &window) {
       map.render(window);
       character.render(window);
       for (auto& enemy : enemys) {
+            window.draw(enemy);
             enemy.render(window);
       }
 

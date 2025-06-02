@@ -10,9 +10,13 @@ void Game::run () {
       DataManager dataManager;
       difficulty = dataManager.getDifficulty();
 
+      sf::Clock clock;
+
       while (window.isOpen()) {
+            float deltaTime = clock.restart().asSeconds();
+
             currentState -> handleInput(window);
-            currentState -> update(window);
+            currentState -> update(window, deltaTime);
             currentState -> render(window);
       }
 }

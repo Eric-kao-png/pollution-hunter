@@ -66,7 +66,7 @@ class GamePlayPage : public GameState {
       GamePlayPage (Game* game);
 
       void handleInput(sf::RenderWindow &window) override;
-      void update(sf::RenderWindow &window) override;
+      void update(sf::RenderWindow &window, float deltaTime) override;
       void render(sf::RenderWindow &window) override;
       ~GamePlayPage () override = default;
 };
