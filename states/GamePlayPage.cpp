@@ -149,7 +149,7 @@ void GamePlayPage::update (sf::RenderWindow &window, float deltaTime) {
       
       // character
       setMousePos(window, characterView);
-      character.update(mousePos, enemys);
+      character.update(mousePos, enemys, deltaTime);
       moveCharacterView();
       changeHealthText();
 
@@ -186,6 +186,7 @@ void GamePlayPage::render (sf::RenderWindow &window) {
 
       window.setView(characterView);
       map.render(window);
+      window.draw(character);
       character.render(window);
       for (auto& enemy : enemys) {
             enemy.render(window);

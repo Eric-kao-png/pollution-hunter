@@ -8,6 +8,8 @@
 
 class Animation;
 
+enum class Direction {front, right, back, left};
+
 class AnimatedSprite : public sf::Sprite {
       protected:
 

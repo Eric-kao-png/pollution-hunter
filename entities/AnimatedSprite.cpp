@@ -1,8 +1,6 @@
 #include "AnimatedSprite.hpp"
 
-AnimatedSprite::AnimatedSprite () : initTexture("./assets/empty.png"), sf::Sprite(initTexture, sf::IntRect({0, 0}, {64, 64})) {
-      
-}
+AnimatedSprite::AnimatedSprite () : initTexture("./assets/empty.png"), sf::Sprite(initTexture, sf::IntRect({0, 0}, {64, 64})) {}
 
 void AnimatedSprite::addAnimation (const std::string& animationName, const std::string& texturePath, Animation animation) {
       animations[animationName] = animation;

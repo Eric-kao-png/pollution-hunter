@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "./Map.hpp"
 #include "./Enemy.hpp"
+#include "./AnimatedSprite.hpp"
 
 constexpr int CHARACTER_SIZE = 64;
 constexpr int CHARACTER_ATTACK_WIDTH = 96;
@@ -11,7 +12,7 @@ constexpr int CHARACTER_ATTACK_HEIGHT = 32;
 
 class Enemy;
 
-class Character {
+class Character : public AnimatedSprite {
       private:
 
       // basic attributes
@@ -20,13 +21,13 @@ class Character {
       int currentHealth;
       int attackPower;
       int speed;
-
-      // hitbox
-      sf::RectangleShape shape;
       
       // about moving
       bool isMoving;
       sf::Vector2f targetPoint;
+      Direction direction;
+
+      Direction determineDirection () const;
 
       // about attacking
       bool isAttacking;
@@ -53,12 +54,12 @@ class Character {
       int getCurrentHealth () const { return currentHealth; }
       int getAttackPower () const { return attackPower; }
       int getSpeed () const { return speed; }
-      sf::Vector2f getPosition () const { return shape.getPosition(); }
+      sf::Vector2f getPosition () const { return AnimatedSprite::getPosition(); }
 
       // function about moving
       void setTargetPoint (const sf::Vector2f& point) { targetPoint = point; }
       bool setIsMoving () const;
-      void move ();
+      void run ();
 
       // function about attacking
       void setIsAttacking (bool isAttacking); 
@@ -76,7 +77,7 @@ class Character {
       bool setIsAlive () const;
       bool getIsAlive () const { return isAlive; }
 
-      void update (const sf::Vector2f& mousePos, const std::vector<Enemy>& enemys);
+      void update (const sf::Vector2f& mousePos, const std::vector<Enemy>& enemys, float deltaTime);
       void render (sf::RenderWindow& window) const;
 };
 

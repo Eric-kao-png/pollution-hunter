@@ -13,8 +13,6 @@ constexpr int ENEMY_ATTACK_HEIGHT = 64;
 
 class Character;
 
-enum class Direction {front, right, back, left};
-
 class Enemy : public AnimatedSprite {
       private:
 
