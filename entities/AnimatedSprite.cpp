@@ -1,10 +1,7 @@
 #include "AnimatedSprite.hpp"
 
-AnimatedSprite::AnimatedSprite () : initTexture("./assets/m-front1.png"), sf::Sprite(initTexture, sf::IntRect({0, 0}, {64, 64})) {
-      addAnimation("frontRun", "./assets/m-front.png", Animation(0, 0, 64, 64, 3, 0.2));
-      addAnimation("rightRun", "./assets/m-right.png", Animation(0, 0, 64, 64, 2, 0.2));
-      addAnimation("backRun", "./assets/m-back.png", Animation(0, 0, 64, 64, 3, 0.2));
-      addAnimation("leftRun", "./assets/m-left.png", Animation(0, 0, 64, 64, 2, 0.2));
+AnimatedSprite::AnimatedSprite () : initTexture("./assets/empty.png"), sf::Sprite(initTexture, sf::IntRect({0, 0}, {64, 64})) {
+      
 }
 
 void AnimatedSprite::addAnimation (const std::string& animationName, const std::string& texturePath, Animation animation) {

@@ -7,6 +7,11 @@ Enemy::Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& sta
         AnimatedSprite() {
       setPosition(startPos);
       setOrigin(getGlobalBounds().size / 2.f);
+
+      addAnimation("frontRun", "./assets/m-front.png", Animation(0, 0, 64, 64, 3, 0.2));
+      addAnimation("rightRun", "./assets/m-right.png", Animation(0, 0, 64, 64, 2, 0.2));
+      addAnimation("backRun", "./assets/m-back.png", Animation(0, 0, 64, 64, 3, 0.2));
+      addAnimation("leftRun", "./assets/m-left.png", Animation(0, 0, 64, 64, 2, 0.2));
 }
 
 void Enemy::setTargetPoint (const Character& character) {
@@ -48,7 +53,7 @@ void Enemy::run () {
 
 bool Enemy::setWantToAttack(const Character& character) const {
       double distance = std::sqrt((getPosition().x - character.getPosition().x) * (getPosition().x - character.getPosition().x) + 
-                            (getPosition().x - character.getPosition().x) * (getPosition().x - character.getPosition().x));
+                            (getPosition().y - character.getPosition().y) * (getPosition().y - character.getPosition().y));
       if (distance <= 150) {
             return true;
       }
