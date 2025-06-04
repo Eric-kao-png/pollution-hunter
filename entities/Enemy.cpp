@@ -3,6 +3,7 @@
 Enemy::Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& startPos) 
       : maxHealth(maxHealth), currentHealth(maxHealth), attackPower(attackPower), speed(speed),
         isMoving(false), wantToAttack(false), canAttack(true), canTakeDamage(true), isTakingDamage(false), isAlive(true), 
+        bulletTexture("./assets/m-bullet.png"),
         targetPoint(startPos),
         AnimatedSprite() {
       setPosition(startPos);
@@ -12,6 +13,9 @@ Enemy::Enemy (int maxHealth, int attackPower, int speed, const sf::Vector2f& sta
       addAnimation("rightRun", "./assets/m-right.png", Animation(0, 0, 64, 64, 2, 0.2));
       addAnimation("backRun", "./assets/m-back.png", Animation(0, 0, 64, 64, 3, 0.2));
       addAnimation("leftRun", "./assets/m-left.png", Animation(0, 0, 64, 64, 2, 0.2));
+      addAnimation("frontAttack", "./assets/m-front_attack.png", Animation(0, 0, 64, 64, 1, 0.2));
+      addAnimation("rightAttack", "./assets/m-right_attack.png", Animation(0, 0, 64, 64, 1, 0.2));
+      addAnimation("leftAttack", "./assets/m-left_attack.png", Animation(0, 0, 64, 64, 1, 0.2));
 }
 
 void Enemy::setTargetPoint (const Character& character) {
@@ -79,7 +83,7 @@ void Enemy::attack (const Character& character) {
       attackShape -> setPosition(getPosition());
       attackShape -> setSize(sf::Vector2f({ENEMY_ATTACK_WIDTH, ENEMY_ATTACK_HEIGHT}));
       attackShape -> setOrigin(sf::Vector2f({0, ENEMY_ATTACK_HEIGHT / 2.f}));
-      attackShape -> setFillColor(sf::Color::Magenta);
+      attackShape -> setTexture(&bulletTexture);
 
       double x = character.getPosition().x - getPosition().x;
       double y = character.getPosition().y - getPosition().y;
@@ -156,7 +160,16 @@ void Enemy::update (const Character& character, float deltaTime) {
       wantToAttack = setWantToAttack(character);
       canAttack = setCanAttack();
       if (wantToAttack && canAttack) {
-            // play("attack");
+            switch (direction) {
+                  case Direction::front:
+                  play("frontAttack"); break;
+                  case Direction::right:
+                  play("rightAttack"); break;
+                  case Direction::left:
+                  play("leftAttack"); break;
+                  case Direction::back:
+                  break;
+            }
             attack(character);
       }
 

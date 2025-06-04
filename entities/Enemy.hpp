@@ -39,6 +39,7 @@ class Enemy : public AnimatedSprite {
       std::unique_ptr<sf::Clock> attackClock;
       std::unique_ptr<sf::Clock> attackColdDown;
       std::unique_ptr<sf::RectangleShape> attackShape;
+      sf::Texture bulletTexture;
 
       bool setWantToAttack (const Character& character) const;
       bool setCanAttack ();
