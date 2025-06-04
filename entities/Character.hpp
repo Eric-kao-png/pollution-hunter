@@ -35,6 +35,7 @@ class Character : public AnimatedSprite {
       std::unique_ptr<sf::RectangleShape> attackShape;
       std::unique_ptr<sf::Clock> attackClock;
       std::unique_ptr<sf::Clock> attackColdDown;
+      sf::Texture bulletTexture;
 
       // about taking damage
       bool canTakeDamage;

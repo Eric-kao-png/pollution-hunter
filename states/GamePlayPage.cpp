@@ -186,8 +186,8 @@ void GamePlayPage::render (sf::RenderWindow &window) {
 
       window.setView(characterView);
       map.render(window);
-      window.draw(character);
       character.render(window);
+      window.draw(character);
       for (auto& enemy : enemys) {
             enemy.render(window);
             window.draw(enemy);

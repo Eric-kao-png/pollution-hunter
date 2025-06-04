@@ -3,6 +3,7 @@
 Character::Character(const std::string& name, int maxHealth, int attackPower, int speed, const Map& map)
     : name(name), maxHealth(maxHealth), currentHealth(maxHealth), attackPower(attackPower), speed(speed), 
       isMoving(false), isAttacking(false), canAttack(true), canTakeDamage(true), isTakingDamage(false), isAlive(true),
+      bulletTexture("./assets/s-bullet.png"),
       targetPoint(map.getPosition()) {
             setPosition(map.getPosition());
             setOrigin(getGlobalBounds().size / 2.f);
@@ -12,6 +13,9 @@ Character::Character(const std::string& name, int maxHealth, int attackPower, in
             addAnimation("backRun", "./assets/s-back.png", Animation(0, 0, 64, 64, 3, 0.2));
             addAnimation("leftRun", "./assets/s-left.png", Animation(0, 0, 64, 64, 3, 0.2));
             addAnimation("idle", "./assets/s-idle.png", Animation(0, 0, 64, 64, 1, 0.2));
+            addAnimation("frontAttack", "./assets/s-front_attack.png", Animation(0, 0, 64, 64, 1, 0.2));
+            addAnimation("rightAttack", "./assets/s-right_attack.png", Animation(0, 0, 64, 64, 1, 0.2));
+            addAnimation("leftAttack", "./assets/s-left_attack.png", Animation(0, 0, 64, 64, 1, 0.2));
       }
 
 bool Character::setIsMoving () const {
@@ -75,7 +79,7 @@ void Character::attack (const sf::Vector2f& mousePos) {
       attackShape -> setPosition(getPosition());
       attackShape -> setSize(sf::Vector2f({CHARACTER_ATTACK_WIDTH, CHARACTER_ATTACK_HEIGHT}));
       attackShape -> setOrigin(sf::Vector2f({0, CHARACTER_ATTACK_HEIGHT / 2.f}));
-      attackShape -> setFillColor(sf::Color::Blue);
+      attackShape -> setTexture(&bulletTexture);
 
       double x = mousePos.x - getPosition().x;
       double y = mousePos.y - getPosition().y;
@@ -151,6 +155,16 @@ void Character::update (const sf::Vector2f& mousePos, const std::vector<Enemy>& 
       // attack
       canAttack = setCanAttack();
       if (isAttacking && canAttack) {
+            switch (direction) {
+                  case Direction::front:
+                        play("frontAttack"); break;
+                  case Direction::right:
+                        play("rightAttack"); break;
+                  case Direction::left:
+                        play("leftAttack"); break;
+                  case Direction::back:
+                        break;
+            }
             attack(mousePos);
       }
 
